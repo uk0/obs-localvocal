@@ -6,7 +6,7 @@
 #include <webvtt-in-sei.h>
 #endif
 
-#include <util/circlebuf.h>
+#include <util/deque.h>
 #include <util/darray.h>
 #include <media-io/audio-resampler.h>
 
@@ -29,7 +29,7 @@
 #define MAX_PREPROC_CHANNELS 10
 #define MAX_WEBVTT_TRACKS 5
 
-#if !defined(LIBOBS_MAJOR_VERSION) || LIBOBS_MAJOR_VERSION < 31
+#if !defined(LIBOBS_API_MAJOR_VER) || LIBOBS_API_MAJOR_VER < 31
 struct encoder_packet_time {
 	/* PTS used to associate uncompressed frames with encoded packets. */
 	int64_t pts;
@@ -112,14 +112,14 @@ struct transcription_filter_data {
 
 	/* PCM buffers */
 	float *copy_buffers[MAX_PREPROC_CHANNELS];
-	struct circlebuf info_buffer;
-	struct circlebuf input_buffers[MAX_PREPROC_CHANNELS];
+	struct deque info_buffer;
+	struct deque input_buffers[MAX_PREPROC_CHANNELS];
 	std::atomic<bool> clear_buffers;
-	struct circlebuf whisper_buffer;
+	struct deque whisper_buffer;
 
 	/* Resampler */
 	audio_resampler_t *resampler_to_whisper;
-	struct circlebuf resampled_buffer;
+	struct deque resampled_buffer;
 
 	/* whisper */
 	std::string whisper_model_path;

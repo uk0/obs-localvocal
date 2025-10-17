@@ -4,7 +4,7 @@ include(ExternalProject)
 include(FetchContent)
 
 if(APPLE)
-
+  message(STATUS "Using pre-compiled CTranslate2")
   FetchContent_Declare(
     ctranslate2_fetch
     URL https://github.com/occ-ai/obs-ai-ctranslate2-dep/releases/download/1.2.0/libctranslate2-macos-Release-1.2.0.tar.gz
@@ -18,7 +18,7 @@ if(APPLE)
   target_compile_options(ct2 INTERFACE -Wno-shorten-64-to-32 -Wno-comma)
 
 elseif(WIN32)
-
+  message(STATUS "Using pre-compiled CTranslate2")
   # check ACCELERATION environment variable
   if(NOT DEFINED ACCELERATION)
     message(FATAL_ERROR "Please set ACCELERATION to either `cpu`, `hipblas`, or `cuda`")
@@ -50,6 +50,7 @@ elseif(WIN32)
   file(GLOB CT2_DLLS ${ctranslate2_fetch_SOURCE_DIR}/bin/*.dll)
   install(FILES ${CT2_DLLS} DESTINATION "obs-plugins/64bit")
 else()
+  message(STATUS "Building CTranslate2 from source")
   # Enable ccache if available
   find_program(CCACHE_PROGRAM ccache)
   if(CCACHE_PROGRAM)
@@ -70,9 +71,11 @@ else()
     BUILD_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config ${CMAKE_BUILD_TYPE}
     CMAKE_GENERATOR ${CMAKE_GENERATOR}
     INSTALL_COMMAND ${CMAKE_COMMAND} --install <BINARY_DIR> --config ${CMAKE_BUILD_TYPE}
-    BUILD_BYPRODUCTS <INSTALL_DIR>/lib/${CMAKE_STATIC_LIBRARY_PREFIX}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX}
+    BUILD_BYPRODUCTS
+      <INSTALL_DIR>/${CMAKE_INSTALL_LIBDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX}
     CMAKE_ARGS -DCMAKE_GENERATOR_PLATFORM=${CMAKE_GENERATOR_PLATFORM} -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-               -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CPU_FEATURES_CMAKE_ARGS}
+               -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+               ${CPU_FEATURES_CMAKE_ARGS}
     LOG_CONFIGURE ON
     LOG_BUILD ON
     LOG_INSTALL ON)
@@ -81,8 +84,10 @@ else()
   add_library(cpu_features STATIC IMPORTED GLOBAL)
   add_dependencies(cpu_features cpu_features_build)
   set_target_properties(
-    cpu_features PROPERTIES IMPORTED_LOCATION
-                            ${INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX})
+    cpu_features
+    PROPERTIES
+      IMPORTED_LOCATION
+      ${INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}cpu_features${CMAKE_STATIC_LIBRARY_SUFFIX})
   set_target_properties(cpu_features PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${INSTALL_DIR}/include)
 
   # build CTranslate2 from source
@@ -91,7 +96,8 @@ else()
   set(CT2_OPENBLAS_CMAKE_ARGS -DWITH_OPENBLAS=OFF)
 
   set(CT2_CMAKE_PLATFORM_OPTIONS -DBUILD_SHARED_LIBS=OFF -DOPENMP_RUNTIME=NONE -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
-  set(CT2_LIB_INSTALL_LOCATION lib/${CMAKE_SHARED_LIBRARY_PREFIX}ctranslate2${CMAKE_STATIC_LIBRARY_SUFFIX})
+  set(CT2_LIB_INSTALL_LOCATION
+      ${CMAKE_INSTALL_LIBDIR}/${CMAKE_SHARED_LIBRARY_PREFIX}ctranslate2${CMAKE_STATIC_LIBRARY_SUFFIX})
 
   ExternalProject_Add(
     ct2_build
@@ -104,6 +110,7 @@ else()
     BUILD_BYPRODUCTS <INSTALL_DIR>/${CT2_LIB_INSTALL_LOCATION}
     CMAKE_ARGS -DCMAKE_GENERATOR_PLATFORM=${CMAKE_GENERATOR_PLATFORM}
                -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+               -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
                -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                -DWITH_CUDA=OFF
                -DWITH_MKL=OFF

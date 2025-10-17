@@ -93,10 +93,6 @@ jobs:
           : Set Up Environment 🔧
           if (( ${+RUNNER_DEBUG} )) setopt XTRACE
 
-          print '::group::Enable Xcode 15.2'
-          sudo xcode-select --switch /Applications/Xcode_15.2.app/Contents/Developer
-          print '::endgroup::'
-
           print '::group::Clean Homebrew Environment'
           local -a to_remove=()
 
@@ -110,6 +106,11 @@ jobs:
 
           print "pluginName=${product_name}" >> $GITHUB_OUTPUT
           print "pluginVersion=${product_version}" >> $GITHUB_OUTPUT
+  
+      - uses: maxim-lobanov/setup-xcode@v1.6.0
+        id: set-xcode-version
+        with:
+          xcode-version: 16.2
 
       - uses: actions/cache@v4
         id: ccache-cache
@@ -262,6 +263,8 @@ jobs:
     defaults:
       run:
         shell: pwsh
+    env:
+      RUNNER_DEBUG: 1
     steps:
       - uses: actions/checkout@v4
         with:
