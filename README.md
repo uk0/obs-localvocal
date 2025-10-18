@@ -146,20 +146,25 @@ For other distros where you can't use the CI build script, you can build the plu
 1. Clone the repository and install these dependencies using your distribution's package manager:
 
     * libssl (with development headers)
+    * icu
 
-2. Generate the CMake build scripts (adjust folders if necessary)
+1. Install rust via [rustup](https://rust-lang.org/tools/install/) (recommended), or your distribution's package manager
+
+1. Generate the CMake build scripts (adjust folders if necessary)
 
     ```sh
-    cmake -B build-dir --preset linux-x86_64 -DUSE_SYSTEM_CURL=ON -DCMAKE_INSTALL_PREFIX=./output_dir
+    cmake -B build-dir --preset linux-x86_64 -DUSE_SYSTEM_CURL=ON -DUSE_SYSTEM_ICU=ON -DCMAKE_INSTALL_PREFIX=./output_dir
     ```
 
-3. Build the plugin and copy the files to the output directory
+    Note: if using CMake 4.0.0 or higher you may also need to add `-DCMAKE_POLICY_VERSION_MINIMUM=3.5`. If possible, please use a version of CMake that is older than 4.0.0, as many of the dependencies used by this plugin still have their minimum versions set to very old versions of CMake.
+
+1. Build the plugin and copy the files to the output directory
 
     ```sh
     cmake --build build-dir --target install
     ```
 
-4. Copy plugin to OBS plugins folder
+1. Copy plugin to OBS plugins folder
 
     ```sh
     mkdir -p ~/.config/obs-studio/plugins/bin/64bit
@@ -168,7 +173,7 @@ For other distros where you can't use the CI build script, you can build the plu
 
     > N.B. Depending on your system, the plugin might be in `./output_dir/lib64/obs-plugins` instead.
 
-5. Copy plugin data to OBS plugins folder - Possibly only needed on first install
+1. Copy plugin data to OBS plugins folder - Possibly only needed on first install
 
     ```sh
     mkdir -p ~/.config/obs-studio/plugins/data
