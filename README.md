@@ -147,6 +147,7 @@ For other distros where you can't use the CI build script, you can build the plu
 
     * libssl (with development headers)
     * icu
+    * vulkan headers
 
 1. Install rust via [rustup](https://rust-lang.org/tools/install/) (recommended), or your distribution's package manager
 
@@ -166,7 +167,7 @@ For other distros where you can't use the CI build script, you can build the plu
 
     ```sh
     mkdir -p ~/.config/obs-studio/plugins/bin/64bit
-    cp -R ./output_dir/lib/obs-plugins/* ~/.config/obs-studio/plugins/bin/64bit/
+    cp -R ./output_dir/lib/obs-plugins/* ~/.config/obs-studio/plugins/obs-localvocal/bin/64bit/
     ```
 
     > N.B. Depending on your system, the plugin might be in `./output_dir/lib64/obs-plugins` instead.
@@ -175,7 +176,7 @@ For other distros where you can't use the CI build script, you can build the plu
 
     ```sh
     mkdir -p ~/.config/obs-studio/plugins/data
-    cp -R ./output_dir/share/obs/obs-plugins/obs-localvocal/* ~/.config/obs-studio/plugins/data/
+    cp -R ./output_dir/share/obs/obs-plugins/obs-localvocal/* ~/.config/obs-studio/plugins/obs-localvocal/data/
     ```
 
 ### Windows
