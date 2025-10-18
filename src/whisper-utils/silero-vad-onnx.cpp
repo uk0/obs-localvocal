@@ -321,7 +321,7 @@ void VadIterator::process(const std::vector<float> &input_wav, bool reset_state)
 		  triggered = false;
 	  }
 	}
-	catch (Ort::Exception e) {
+	catch (const Ort::Exception &e) {
 	  obs_log(LOG_ERROR, "Caught exception when running VAD prediction. Error code: %s, message: %s",
 			  ort_error_code_str(e.GetOrtErrorCode()), e.what());
 	}
@@ -333,7 +333,7 @@ void VadIterator::process(const std::vector<float> &input_wav, std::vector<float
 	  process(input_wav);
 	  collect_chunks(input_wav, output_wav);
 	}
-	catch (Ort::Exception e) {
+	catch (const Ort::Exception &e) {
 	  obs_log(LOG_ERROR, "Caught exception when running VAD prediction. Error code: %s, message: %s",
 			  ort_error_code_str(e.GetOrtErrorCode()), e.what());
 	}

@@ -665,7 +665,7 @@ void recording_state_callback(enum obs_frontend_event event, void *data)
 			newPath = recordingPath.parent_path() / newPath.filename();
 
 			fs::rename(outputPath, newPath);
-		} catch (std::filesystem::filesystem_error e) {
+		} catch (const std::filesystem::filesystem_error &e) {
 			obs_log(LOG_ERROR, "Error renaming output file - %s", e.what());
 		}
 	} else if (event == OBS_FRONTEND_EVENT_STREAMING_STARTING) {
