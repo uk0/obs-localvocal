@@ -67,7 +67,6 @@ Current Features:
 - Partial transcriptions for a streaming-captions experience
 - 100s of fine-tuned Whisper models for dozens of languages from HuggingFace
 
-
 ## Download
 Check out the [latest releases](https://github.com/locaal-ai/obs-localvocal/releases) for downloads and install instructions.
 
@@ -84,6 +83,8 @@ LocalVocal is available in multiple versions to cater to different hardware conf
 - **Linux x86_64**: This version is for Linux systems with x86_64 architecture.
 
 Make sure to download the version that matches your system's hardware and operating system for the best performance.
+
+If using Windows and the plugin fails to load after installation, please ensure you have the [latest MSVC runtime](https://aka.ms/vs/17/release/vc_redist.x64.exe) installed, and that you are using the correct version (e.g. not using a CUDA version without an NVidia GPU and CUDA installed)
 
 ### Models
 The plugin ships with the Tiny.en model, and will autonomously download other Whisper models through a dropdown.
