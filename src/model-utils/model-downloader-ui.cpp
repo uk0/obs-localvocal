@@ -14,7 +14,7 @@
 #include <string>
 #include <stdexcept>
 
-#include <openssl/sha.h>
+#include "sha256.h"
 
 size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream)
 {
@@ -253,18 +253,24 @@ int ModelDownloadWorker::progress_callback(void *clientp, curl_off_t dltotal, cu
 
 bool ModelDownloadWorker::valid_hash(std::string path, std::string hash)
 {
-	auto calculated_hash = sha256_sum(path.c_str());
+	obs_log(LOG_INFO, "Calculating hash for model %s", path.c_str());
+	try {
+		auto calculated_hash = sha256_sum(path.c_str());
 
-	if (hash == "") {
-		obs_log(LOG_WARNING, "No hash for model in config. Calculated hash: %s",
-			calculated_hash.c_str());
-		return true;
-	} else if (hash == calculated_hash) {
-		obs_log(LOG_INFO, "Model hash is valid");
-		return true;
-	} else {
-		obs_log(LOG_ERROR, "Model hash mismatch. Model hash: %s, calculated hash: %s",
-			hash.c_str(), calculated_hash.c_str());
+		if (hash == "") {
+			obs_log(LOG_WARNING, "No hash for model in config. Calculated hash: %s",
+				calculated_hash.c_str());
+			return true;
+		} else if (hash == calculated_hash) {
+			obs_log(LOG_INFO, "Model hash is valid");
+			return true;
+		} else {
+			obs_log(LOG_ERROR, "Model hash mismatch. Model hash: %s, calculated hash: %s",
+				hash.c_str(), calculated_hash.c_str());
+			return false;
+		}
+	} catch (const std::exception &e) {
+		obs_log(LOG_ERROR, "Error calculating hash for model - ", e.what());
 		return false;
 	}
 }
@@ -282,27 +288,17 @@ std::string ModelDownloadWorker::sha256_sum(const char *const path)
 	constexpr const std::size_t buffer_size{1 << 12};
 	char buffer[buffer_size];
 
-	unsigned char hash[SHA256_DIGEST_LENGTH] = {0};
-
-	SHA256_CTX ctx;
-	SHA256_Init(&ctx);
+	SHA256 ctx;
 
 	while (fp.good()) {
 		fp.read(buffer, buffer_size);
-		SHA256_Update(&ctx, buffer, fp.gcount());
+		ctx.add(buffer, fp.gcount());
 	}
 
-	SHA256_Final(hash, &ctx);
+	auto hash = ctx.getHash();
 	fp.close();
 
-	std::ostringstream os;
-	os << std::hex << std::setfill('0');
-
-	for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i) {
-		os << std::setw(2) << static_cast<unsigned int>(hash[i]);
-	}
-
-	return os.str();
+	return hash;
 }
 
 ModelDownloader::~ModelDownloader()
