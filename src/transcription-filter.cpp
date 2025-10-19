@@ -14,10 +14,6 @@
 #include <Windows.h>
 #endif
 
-#ifdef PROCESSOR_IS_X86
-#include "cpu_features/cpuinfo_x86.h"
-#endif
-
 #include <QString>
 
 #include "plugin-support.h"
@@ -480,13 +476,6 @@ void transcription_filter_update(void *data, obs_data_t *s)
 void *transcription_filter_create(obs_data_t *settings, obs_source_t *filter)
 {
 	obs_log(LOG_INFO, "LocalVocal filter create");
-
-#ifdef PROCESSOR_IS_X86
-	static const cpu_features::X86Features features = cpu_features::GetX86Info().features;
-	if (!features.avx2) {
-		obs_log(LOG_WARNING, "AVX2 support not detected");
-	}
-#endif
 
 	void *data = bmalloc(sizeof(struct transcription_filter_data));
 	struct transcription_filter_data *gf = new (data) transcription_filter_data();

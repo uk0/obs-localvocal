@@ -81,7 +81,3 @@ set(_obs_clang_cxx_options
 if(NOT DEFINED CMAKE_COMPILE_WARNING_AS_ERROR)
   set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 endif()
-
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(x86_64)|(AMD64|amd64)|(^i.86$)")
-  add_compile_definitions(PROCESSOR_IS_X86)
-endif()
