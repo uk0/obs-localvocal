@@ -3,16 +3,9 @@
 
 #include <obs-module.h>
 
-#include <cstdlib>
-#include <cerrno>
-#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <stdexcept>
 
 #include "sha256.h"
 
