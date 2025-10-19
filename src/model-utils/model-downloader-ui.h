@@ -28,6 +28,8 @@ signals:
 private:
 	static int progress_callback(void *clientp, curl_off_t dltotal, curl_off_t dlnow,
 				     curl_off_t ultotal, curl_off_t ulnow);
+	bool valid_hash(std::string path, std::string hash);
+	std::string sha256_sum(const char *const path);
 	ModelInfo model_info;
 };
 
