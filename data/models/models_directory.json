@@ -173,177 +173,177 @@
     },
     {
       "friendly_name": "Whisper Base q5 (57Mb)",
-      "local_folder_name": "whisper-base-q5",
+      "local_folder_name": "ggml-base-q5_1",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-base-q5_1.bin",
-          "sha256": "422F1AE452ADE6F30A004D7E5C6A43195E4433BC370BF23FAC9CC591F01A8898"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin",
+          "sha256": "422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898"
         }
       ]
     },
     {
       "friendly_name": "Whisper Base English q5 (57Mb)",
-      "local_folder_name": "ggml-model-whisper-base-en-q5_1",
+      "local_folder_name": "ggml-base-en-q5_1",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-base.en-q5_1.bin",
-          "sha256": "4BAF70DD0D7C4247BA2B81FAFD9C01005AC77C2F9EF064E00DCF195D0E2FDD2F"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en-q5_1.bin",
+          "sha256": "4baf70dd0d7c4247ba2b81fafd9c01005ac77c2f9ef064e00dcf195d0e2fdd2f"
         }
       ]
     },
     {
       "friendly_name": "Whisper Base (141Mb)",
-      "local_folder_name": "ggml-model-whisper-base",
+      "local_folder_name": "ggml-base",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-base.bin",
-          "sha256": "60ED5BC3DD14EEA856493D334349B405782DDCAF0028D4B5DF4088345FBA2EFE"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin",
+          "sha256": "60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe"
         }
       ]
     },
     {
       "friendly_name": "Whisper Base English (141Mb)",
-      "local_folder_name": "ggml-model-whisper-base-en",
+      "local_folder_name": "ggml-base-en",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-base.en.bin",
-          "sha256": "A03779C86DF3323075F5E796CB2CE5029F00EC8869EEE3FDFB897AFE36C6D002"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin",
+          "sha256": "a03779c86df3323075f5e796cb2ce5029f00ec8869eee3fdfb897afe36c6d002"
         }
       ]
     },
     {
-      "friendly_name": "Whisper Large v1 q5 (1Gb)",
-      "local_folder_name": "ggml-model-whisper-large-q5_0",
+      "friendly_name": "Whisper Large v2 q5 (1Gb)",
+      "local_folder_name": "ggml-large-v2-q5_0",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-large-q5_0.bin",
-          "sha256": "3A214837221E4530DBC1FE8D734F302AF393EB30BD0ED046042EBF4BAF70F6F2"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v2-q5_0.bin",
+          "sha256": "3a214837221e4530dbc1fe8d734f302af393eb30bd0ed046042ebf4baf70f6f2"
         }
       ]
     },
     {
       "friendly_name": "Whisper Medium q5 (514Mb)",
-      "local_folder_name": "ggml-model-whisper-medium-q5_0",
+      "local_folder_name": "ggml-medium-q5_0",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-medium-q5_0.bin",
-          "sha256": "19FEA4B380C3A618EC4723C3EEF2EB785FFBA0D0538CF43F8F235E7B3B34220F"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium-q5_0.bin",
+          "sha256": "19fea4b380c3a618ec4723c3eef2eb785ffba0d0538cf43f8f235e7b3b34220f"
         }
       ]
     },
     {
       "friendly_name": "Whisper Medium English q5 (514Mb)",
-      "local_folder_name": "ggml-model-whisper-medium-en-q5_0",
+      "local_folder_name": "ggml-medium-en-q5_0",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-medium.en-q5_0.bin",
-          "sha256": "76733E26AD8FE1C7A5BF7531A9D41917B2ADC0F20F2E4F5531688A8C6CD88EB0"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.en-q5_0.bin",
+          "sha256": "76733e26ad8fe1c7a5bf7531a9d41917b2adc0f20f2e4f5531688a8c6cd88eb0"
         }
       ]
     },
     {
       "friendly_name": "Whisper Small q5 (181Mb)",
-      "local_folder_name": "ggml-model-whisper-small-q5_1",
+      "local_folder_name": "ggml-small-q5_1",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-small-q5_1.bin",
-          "sha256": "AE85E4A935D7A567BD102FE55AFC16BB595BDB618E11B2FC7591BC08120411BB"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small-q5_1.bin",
+          "sha256": "ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb"
         }
       ]
     },
     {
       "friendly_name": "Whisper Small English q5 (181Mb)",
-      "local_folder_name": "ggml-model-whisper-small-en-q5_1",
+      "local_folder_name": "ggml-small-en-q5_1",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-small.en-q5_1.bin",
-          "sha256": "BFDFF4894DCB76BBF647D56263EA2A96645423F1669176F4844A1BF8E478AD30"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.en-q5_1.bin",
+          "sha256": "bfdff4894dcb76bbf647d56263ea2a96645423f1669176f4844a1bf8e478ad30"
         }
       ]
     },
     {
       "friendly_name": "Whisper Small (465Mb)",
-      "local_folder_name": "ggml-model-whisper-small",
+      "local_folder_name": "ggml-small",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-small.bin",
-          "sha256": "1BE3A9B2063867B937E64E2EC7483364A79917E157FA98C5D94B5C1FFFEA987B"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin",
+          "sha256": "1be3a9b2063867b937e64e2ec7483364a79917e157fa98c5d94b5c1fffea987b"
         }
       ]
     },
     {
       "friendly_name": "Whisper Small English (465Mb)",
-      "local_folder_name": "ggml-model-whisper-small-en",
+      "local_folder_name": "ggml-small-en",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-small.en.bin",
-          "sha256": "C6138D6D58ECC8322097E0F987C32F1BE8BB0A18532A3F88F734D1BBF9C41E5D"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.en.bin",
+          "sha256": "c6138d6d58ecc8322097e0f987c32f1be8bb0a18532a3f88f734d1bbf9c41e5d"
         }
       ]
     },
     {
       "friendly_name": "Whisper Tiny (74Mb)",
-      "local_folder_name": "ggml-model-whisper-tiny",
+      "local_folder_name": "ggml-tiny",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-tiny.bin",
-          "sha256": "BE07E048E1E599AD46341C8D2A135645097A538221678B7ACDD1B1919C6E1B21"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.bin",
+          "sha256": "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21"
         }
       ]
     },
     {
       "friendly_name": "Whisper Tiny q5 (31Mb)",
-      "local_folder_name": "ggml-model-whisper-tiny-q5_1",
+      "local_folder_name": "ggml-tiny-q5_1",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-tiny-q5_1.bin",
-          "sha256": "818710568DA3CA15689E31A743197B520007872FF9576237BDA97BD1B469C3D7"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny-q5_1.bin",
+          "sha256": "818710568da3ca15689e31a743197b520007872ff9576237bda97bd1b469c3d7"
         }
       ]
     },
     {
       "friendly_name": "Whisper Tiny English q5 (31Mb)",
-      "local_folder_name": "ggml-model-whisper-tiny-en-q5_1",
+      "local_folder_name": "ggml-tiny-en-q5_1",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-tiny.en-q5_1.bin",
-          "sha256": "C77C5766F1CEF09B6B7D47F21B546CBDDD4157886B3B5D6D4F709E91E66C7C2B"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en-q5_1.bin",
+          "sha256": "c77c5766f1cef09b6b7d47f21b546cbddd4157886b3b5d6d4f709e91e66c7c2b"
         }
       ]
     },
     {
       "friendly_name": "Whisper Tiny English q8 (42Mb)",
-      "local_folder_name": "ggml-model-whisper-tiny-en-q8_0",
+      "local_folder_name": "ggml-tiny-en-q8_0",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-tiny.en-q8_0.bin",
-          "sha256": "5BC2B3860AA151A4C6E7BB095E1FCCE7CF12C7B020CA08DCEC0C6D018BB7DD94"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en-q8_0.bin",
+          "sha256": "5bc2b3860aa151a4c6e7bb095e1fcce7cf12c7b020ca08dcec0c6d018bb7dd94"
         }
       ]
     },
     {
       "friendly_name": "Whisper Tiny English (74Mb)",
-      "local_folder_name": "ggml-model-whisper-tiny-en",
+      "local_folder_name": "ggml-tiny-en",
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://ggml.ggerganov.com/ggml-model-whisper-tiny.en.bin",
-          "sha256": "921E4CF8686FDD993DCD081A5DA5B6C365BFDE1162E72B08D75AC75289920B1F"
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en.bin",
+          "sha256": "921e4cf8686fdd993dcd081a5da5b6c365bfde1162e72b08d75ac75289920b1f"
         }
       ]
     },
@@ -420,7 +420,7 @@
       "files": [
         {
           "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin",
-          "sha256": "1FC70F774D38EB169993AC391EEA357EF47C88757EF72EE5943879B7E8E2BC69"
+          "sha256": "1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69"
         }
       ]
     },
@@ -431,7 +431,7 @@
       "files": [
         {
           "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo-q5_0.bin",
-          "sha256": "394221709CD5AD1F40C46E6031CA61BCE88931E6E088C188294C6D5A55FFA7E2"
+          "sha256": "394221709cd5ad1f40c46e6031ca61bce88931e6e088c188294c6d5a55ffa7e2"
         }
       ]
     },
@@ -441,8 +441,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-base-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q8_0.bin",
+          "sha256": "c577b9a86e7e048a0b7eada054f4dd79a56bbfa911fbdacf900ac5b567cbb7d9"
         }
       ]
     },
@@ -452,8 +452,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-base.en-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en-q8_0.bin",
+          "sha256": "a4d4a0768075e13cfd7e19df3ae2dbc4a68d37d36a7dad45e8410c9a34f8c87e"
         }
       ]
     },
@@ -463,8 +463,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-large-v2-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v2-q8_0.bin",
+          "sha256": "fef54e6d898246a65c8285bfa83bd1807e27fadf54d5d4e81754c47634737e8c"
         }
       ]
     },
@@ -474,8 +474,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-medium-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium-q8_0.bin",
+          "sha256": "42a1ffcbe4167d224232443396968db4d02d4e8e87e213d3ee2e03095dea6502"
         }
       ]
     },
@@ -485,8 +485,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-large-v3-turbo-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo-q8_0.bin",
+          "sha256": "317eb69c11673c9de1e1f0d459b253999804ec71ac4c23c17ecf5fbe24e259a1"
         }
       ]
     },
@@ -496,8 +496,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-small-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small-q8_0.bin",
+          "sha256": "49c8fb02b65e6049d5fa6c04f81f53b867b5ec9540406812c643f177317f779f"
         }
       ]
     },
@@ -507,8 +507,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-medium.en-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.en-q8_0.bin",
+          "sha256": "43fa2cd084de5a04399a896a9a7a786064e221365c01700cea4666005218f11c"
         }
       ]
     },
@@ -518,8 +518,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-small.en-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.en-q8_0.bin",
+          "sha256": "67a179f608ea6114bd3fdb9060e762b588a3fb3bd00c4387971be4d177958067"
         }
       ]
     },
@@ -529,8 +529,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-tiny-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny-q8_0.bin",
+          "sha256": "c2085835d3f50733e2ff6e4b41ae8a2b8d8110461e18821b09a15c40c42d1cca"
         }
       ]
     },
@@ -540,8 +540,8 @@
       "type": "MODEL_TYPE_TRANSCRIPTION",
       "files": [
         {
-          "url": "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-tiny.en-q8_0.bin",
-          "sha256": ""
+          "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.en-q8_0.bin",
+          "sha256": "5bc2b3860aa151a4c6e7bb095e1fcce7cf12c7b020ca08dcec0c6d018bb7dd94"
         }
       ]
     },
