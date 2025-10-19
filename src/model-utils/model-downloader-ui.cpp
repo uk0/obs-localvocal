@@ -258,7 +258,8 @@ bool ModelDownloadWorker::valid_hash(std::string path, std::string hash)
 			obs_log(LOG_INFO, "Model hash is valid");
 			return true;
 		} else {
-			obs_log(LOG_ERROR, "Model hash mismatch. Model hash: %s, calculated hash: %s",
+			obs_log(LOG_ERROR,
+				"Model hash mismatch. Model hash: %s, calculated hash: %s",
 				hash.c_str(), calculated_hash.c_str());
 			return false;
 		}
