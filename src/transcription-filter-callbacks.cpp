@@ -463,9 +463,9 @@ void output_packet_added_callback(obs_output_t *output, struct encoder_packet *p
 			if (strcmp(obs_encoder_get_codec(encoder), "h264") == 0) {
 				codec_flavor = H264AnnexB;
 			} else if (strcmp(obs_encoder_get_codec(encoder), "av1") == 0) {
-				continue;
+				codec_flavor = AV1OBUs;
 			} else if (strcmp(obs_encoder_get_codec(encoder), "hevc") == 0) {
-				continue;
+				codec_flavor = H265AnnexB;
 			} else {
 				continue;
 			}
@@ -479,7 +479,7 @@ void output_packet_added_callback(obs_output_t *output, struct encoder_packet *p
 			uint8_t track_index = 0;
 			// FIXME: this may be too lazy, i.e. languages should probably be locked in the signal handler instead
 			for (auto &lang : gf.active_languages) {
-				auto lang_it = whisper_available_lang_reverse.find(lang);
+				auto lang_it = whisper_available_lang.find(lang);
 				if (lang_it == whisper_available_lang.end()) {
 					obs_log(LOG_WARNING,
 						"requested language '%s' unknown, track not added",

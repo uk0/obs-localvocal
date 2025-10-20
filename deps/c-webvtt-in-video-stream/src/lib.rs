@@ -5,7 +5,10 @@ use std::{
 };
 use strum_macros::FromRepr;
 use video_bytestream_tools::{
-    h264::{self, H264ByteStreamWrite, NalHeader, NalUnitWrite, RbspWrite},
+    av1,
+    h264::{self, H264ByteStreamWrite, H264NalHeader},
+    h265::{self, H265ByteStreamWrite, H265NalHeader},
+    h26x::{NalUnitWrite, RbspWrite},
     webvtt::WebvttWrite,
 };
 use webvtt_in_video_stream::{WebvttMuxer, WebvttMuxerBuilder, WebvttString};
@@ -103,6 +106,8 @@ enum CodecFlavor {
     H264Avcc2,
     H264Avcc4,
     H264AnnexB,
+    H265AnnexB,
+    AV1OBUs,
 }
 
 impl CodecFlavor {
@@ -112,6 +117,8 @@ impl CodecFlavor {
             CodecFlavor::H264Avcc2 => CodecFlavorInternal::H264(CodecFlavorH264::Avcc(2)),
             CodecFlavor::H264Avcc4 => CodecFlavorInternal::H264(CodecFlavorH264::Avcc(4)),
             CodecFlavor::H264AnnexB => CodecFlavorInternal::H264(CodecFlavorH264::AnnexB),
+            CodecFlavor::H265AnnexB => CodecFlavorInternal::H265(CodecFlavorH265::AnnexB),
+            CodecFlavor::AV1OBUs => CodecFlavorInternal::AV1,
         }
     }
 }
@@ -121,8 +128,14 @@ enum CodecFlavorH264 {
     AnnexB,
 }
 
+enum CodecFlavorH265 {
+    AnnexB,
+}
+
 enum CodecFlavorInternal {
     H264(CodecFlavorH264),
+    H265(CodecFlavorH265),
+    AV1,
 }
 
 pub struct WebvttBuffer(Vec<u8>);
@@ -150,8 +163,13 @@ pub extern "C" fn webvtt_muxer_try_mux_into_bytestream(
         Ok(true)
     }
 
-    fn create_nal_header() -> NalHeader {
-        NalHeader::from_nal_unit_type_and_nal_ref_idc(h264_reader::nal::UnitType::SEI, 0).unwrap()
+    fn create_nal_header() -> H264NalHeader {
+        H264NalHeader::from_nal_unit_type_and_nal_ref_idc(h264_reader::nal::UnitType::SEI, 0)
+            .unwrap()
+    }
+
+    fn create_h265_nal_header() -> H265NalHeader {
+        H265NalHeader::from_nal_unit_type_and_nuh_ids(h265::UnitType::PrefixSeiNut, 0, 0).unwrap()
     }
 
     fn inner(
@@ -195,6 +213,33 @@ pub extern "C" fn webvtt_muxer_try_mux_into_bytestream(
                     write.finish_rbsp()?;
                     Ok(())
                 },
+            )
+            .ok()?,
+
+            CodecFlavorInternal::H265(CodecFlavorH265::AnnexB) => mux_into_bytestream(
+                muxer,
+                video_timestamp,
+                add_header,
+                &mut buffer,
+                |buffer| -> Result<h265::annex_b::AnnexBRbspWriter<_>, Box<dyn Error>> {
+                    Ok(h265::annex_b::AnnexBWriter::new(buffer)
+                        .start_write_nal_unit()?
+                        .write_nal_header(create_h265_nal_header())?)
+                },
+                |write| {
+                    write.finish_rbsp()?;
+                    Ok(())
+                },
+            )
+            .ok()?,
+
+            CodecFlavorInternal::AV1 => mux_into_bytestream(
+                muxer,
+                video_timestamp,
+                add_header,
+                &mut buffer,
+                |buffer| Ok(av1::OBUWriter::new(buffer)),
+                |_write| Ok(()),
             )
             .ok()?,
         };

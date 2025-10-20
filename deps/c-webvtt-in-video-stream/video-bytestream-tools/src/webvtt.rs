@@ -1,4 +1,4 @@
-use crate::h264::{write_sei_header, CountingSink};
+use crate::h26x::Result;
 use byteorder::{BigEndian, WriteBytesExt};
 use std::{io::Write, time::Duration};
 use uuid::{uuid, Uuid};
@@ -17,6 +17,31 @@ trait WriteCStrExt: Write {
 
 impl<W: Write + ?Sized> WriteCStrExt for W {}
 
+pub(crate) struct CountingSink {
+    count: usize,
+}
+
+impl CountingSink {
+    pub fn new() -> Self {
+        Self { count: 0 }
+    }
+
+    pub fn count(&self) -> usize {
+        self.count
+    }
+}
+
+impl Write for CountingSink {
+    fn write(&mut self, buf: &[u8]) -> Result<usize> {
+        self.count += buf.len();
+        Ok(buf.len())
+    }
+
+    fn flush(&mut self) -> Result<()> {
+        Ok(())
+    }
+}
+
 pub struct WebvttTrack<'a> {
     pub default: bool,
     pub autoselect: bool,
@@ -32,6 +57,7 @@ pub(crate) fn write_webvtt_header<W: Write + ?Sized>(
     max_latency_to_video: Duration,
     send_frequency_hz: u8,
     subtitle_tracks: &[WebvttTrack],
+    write_format_header: impl FnOnce(&mut W, usize) -> std::io::Result<()>,
 ) -> std::io::Result<()> {
     fn inner<W: ?Sized + Write>(
         writer: &mut W,
@@ -82,7 +108,7 @@ pub(crate) fn write_webvtt_header<W: Write + ?Sized>(
         send_frequency_hz,
         subtitle_tracks,
     )?;
-    write_sei_header(writer, USER_DATA_UNREGISTERED, count.count())?;
+    write_format_header(writer, count.count())?;
     inner(
         writer,
         max_latency_to_video,
@@ -98,6 +124,7 @@ pub(crate) fn write_webvtt_payload<W: Write + ?Sized>(
     chunk_version: u8,
     video_offset: Duration,
     webvtt_payload: &str, // TODO: replace with string type that checks for interior NULs
+    write_format_header: impl FnOnce(&mut W, usize) -> std::io::Result<()>,
 ) -> std::io::Result<()> {
     fn inner<W: ?Sized + Write>(
         writer: &mut W,
@@ -125,7 +152,7 @@ pub(crate) fn write_webvtt_payload<W: Write + ?Sized>(
         video_offset,
         webvtt_payload,
     )?;
-    write_sei_header(writer, USER_DATA_UNREGISTERED, count.count())?;
+    write_format_header(writer, count.count())?;
     inner(
         writer,
         track_index,
