@@ -28,7 +28,7 @@
 bool whisper_abort_callback(void *data)
 {
 	// Seems like data is usually a string?
-	obs_log(LOG_ERROR, "Error in GGML processing - %s", (char *)(data));
+	obs_log(LOG_DEBUG, "Error in GGML processing - %s", (char *)(data));
 	return false;
 }
 
