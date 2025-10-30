@@ -181,8 +181,29 @@ void transcription_filter_destroy(void *data)
 	if (gf->translation_monitor.isEnabled()) {
 		gf->translation_monitor.stopThread();
 	}
+	if (gf->cloud_translation_monitor.isEnabled()) {
+		gf->cloud_translation_monitor.stopThread();
+	}
 
 	bfree(gf);
+}
+
+void text_output_source_update(const char *new_text_source_name, std::string &text_source,
+			       transcription_filter_data *gf)
+{
+	if (new_text_source_name == nullptr || strcmp(new_text_source_name, "none") == 0 ||
+	    strcmp(new_text_source_name, "(null)") == 0 || strlen(new_text_source_name) == 0) {
+		// new selected text source is not valid, release the old one
+		send_caption_to_source(text_source, "", gf);
+		text_source.clear();
+	} else {
+		if (text_source != new_text_source_name) {
+			obs_log(gf->log_level, "Clearing previous text source %s",
+				text_source.c_str());
+			send_caption_to_source(text_source, "", gf);
+		}
+		text_source = new_text_source_name;
+	}
 }
 
 void transcription_filter_update(void *data, obs_data_t *s)
@@ -255,7 +276,12 @@ void transcription_filter_update(void *data, obs_data_t *s)
 	if (filter_words_replace != nullptr && strlen(filter_words_replace) > 0) {
 		obs_log(gf->log_level, "filter_words_replace: %s", filter_words_replace);
 		// deserialize the filter words replace
-		gf->filter_words_replace = deserialize_filter_words_replace(filter_words_replace);
+		try {
+			gf->filter_words_replace =
+				deserialize_filter_words_replace(filter_words_replace);
+		} catch (const std::exception &e) {
+			obs_log(LOG_ERROR, "Error deserialising filter words: %s", e.what());
+		}
 	} else {
 		// clear the filter words replace
 		gf->filter_words_replace.clear();
@@ -292,8 +318,20 @@ void transcription_filter_update(void *data, obs_data_t *s)
 				gf,
 				[gf](const std::string &translated_text) {
 					if (gf->buffered_output &&
-					    gf->translation_output != "none") {
+					    !gf->translation_output.empty()) {
 						send_caption_to_source(gf->translation_output,
+								       translated_text, gf);
+					}
+				},
+				[gf](const std::string &) {}, new_buffer_num_lines,
+				new_buffer_num_chars_per_line, std::chrono::seconds(3),
+				new_buffer_output_type);
+			gf->cloud_translation_monitor.initialize(
+				gf,
+				[gf](const std::string &translated_text) {
+					if (gf->buffered_output &&
+					    !gf->translate_cloud_output.empty()) {
+						send_caption_to_source(gf->translate_cloud_output,
 								       translated_text, gf);
 					}
 				},
@@ -316,6 +354,12 @@ void transcription_filter_update(void *data, obs_data_t *s)
 				gf->translation_monitor.setNumPerSentence(
 					new_buffer_num_chars_per_line);
 				gf->translation_monitor.setSegmentation(new_buffer_output_type);
+				gf->cloud_translation_monitor.clear();
+				gf->cloud_translation_monitor.setNumSentences(new_buffer_num_lines);
+				gf->cloud_translation_monitor.setNumPerSentence(
+					new_buffer_num_chars_per_line);
+				gf->cloud_translation_monitor.setSegmentation(
+					new_buffer_output_type);
 			}
 		}
 		gf->buffered_output_num_lines = new_buffer_num_lines;
@@ -330,6 +374,8 @@ void transcription_filter_update(void *data, obs_data_t *s)
 				gf->captions_monitor.stopThread();
 				gf->translation_monitor.clear();
 				gf->translation_monitor.stopThread();
+				gf->cloud_translation_monitor.clear();
+				gf->cloud_translation_monitor.stopThread();
 			}
 			gf->buffered_output = false;
 		}
@@ -341,7 +387,8 @@ void transcription_filter_update(void *data, obs_data_t *s)
 	gf->translation_ctx.input_tokenization_style =
 		(InputTokenizationStyle)obs_data_get_int(s, "translate_input_tokenization_style");
 	gf->translate_only_full_sentences = obs_data_get_bool(s, "translate_only_full_sentences");
-	gf->translation_output = obs_data_get_string(s, "translate_output");
+	text_output_source_update(obs_data_get_string(s, "translate_output"),
+				  gf->translation_output, gf);
 	std::string new_translate_model_index = obs_data_get_string(s, "translate_model");
 	std::string new_translation_model_path_external =
 		obs_data_get_string(s, "translation_model_path_external");
@@ -387,7 +434,8 @@ void transcription_filter_update(void *data, obs_data_t *s)
 	gf->translate_cloud_config.provider = obs_data_get_string(s, "translate_cloud_provider");
 	gf->translate_cloud_target_language =
 		obs_data_get_string(s, "translate_cloud_target_language");
-	gf->translate_cloud_output = obs_data_get_string(s, "translate_cloud_output");
+	text_output_source_update(obs_data_get_string(s, "translate_cloud_output"),
+				  gf->translate_cloud_output, gf);
 	gf->translate_cloud_only_full_sentences =
 		obs_data_get_bool(s, "translate_cloud_only_full_sentences");
 	gf->translate_cloud_config.access_key = obs_data_get_string(s, "translate_cloud_api_key");
@@ -402,15 +450,8 @@ void transcription_filter_update(void *data, obs_data_t *s)
 
 	obs_log(gf->log_level, "update text source");
 	// update the text source
-	const char *new_text_source_name = obs_data_get_string(s, "subtitle_sources");
-
-	if (new_text_source_name == nullptr || strcmp(new_text_source_name, "none") == 0 ||
-	    strcmp(new_text_source_name, "(null)") == 0 || strlen(new_text_source_name) == 0) {
-		// new selected text source is not valid, release the old one
-		gf->text_source_name.clear();
-	} else {
-		gf->text_source_name = new_text_source_name;
-	}
+	text_output_source_update(obs_data_get_string(s, "subtitle_sources"), gf->text_source_name,
+				  gf);
 
 	obs_log(gf->log_level, "update whisper params");
 	{
