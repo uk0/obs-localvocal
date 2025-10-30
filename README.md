@@ -1,3 +1,7 @@
+## Repo sponsors: [Recall.ai](https://www.recall.ai/product/desktop-recording-sdk?utm_source=github&utm_medium=sponsorship&utm_campaign=royshil-obs-localvocal) - API for desktop recording
+
+If you’re looking for a hosted desktop recording API, consider checking out [Recall.ai](https://www.recall.ai/product/desktop-recording-sdk?utm_source=github&utm_medium=sponsorship&utm_campaign=royshil-obs-localvocal), an API that records Zoom, Google Meet, Microsoft Teams, in-person meetings, and more.
+
 # LocalVocal - Speech AI assistant OBS Plugin
 
 <div align="center">
@@ -22,10 +26,6 @@ Download:</br>
 LocalVocal lets you transcribe, locally on your machine, speech into text and simultaneously translate to any language. ✅ No GPU required, ✅ no cloud costs, ✅ no network and ✅ no downtime! Privacy first - all data stays on your machine.
 
 The plugin runs [OpenAI's Whisper](https://github.com/openai/whisper) to process real-time speech and predict a transcription, utilizing [Whisper.cpp](https://github.com/ggerganov/whisper.cpp) from [ggerganov](https://github.com/ggerganov) to run the model efficiently on CPUs and GPUs. Translation is done with [CTranslate2](https://github.com/OpenNMT/CTranslate2).
-
-## Word from our sponsors: Recall.ai - API for desktop recording
-
-If you’re looking for a hosted desktop recording API, consider checking out [Recall.ai](https://www.recall.ai/product/desktop-recording-sdk?utm_source=github&utm_medium=sponsorship&utm_campaign=royshil-obs-localvocal), an API that records Zoom, Google Meet, Microsoft Teams, in-person meetings, and more.
 
 ## Usage
 
