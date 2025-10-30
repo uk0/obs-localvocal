@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31...4.12)
+cmake_minimum_required(VERSION 3.28...4.12)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/bootstrap.cmake" NO_POLICY_SCOPE)
 
@@ -65,6 +65,9 @@ if(WIN32)
         CACHE STRING "Acceleration to use")
   endif()
   set_property(CACHE ACCELERATION PROPERTY STRINGS "cpu" "hipblas" "cuda" "vulkan")
+elseif(UNIX AND NOT APPLE)
+  set(BLA_VENDOR OpenBLAS)
+  find_package(BLAS REQUIRED)
 endif()
 
 include(cmake/BuildWhispercpp.cmake)

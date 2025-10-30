@@ -117,7 +117,8 @@ else()
   endif()
   set(Whispercpp_Build_GIT_TAG "v1.6.2")
   set(WHISPER_EXTRA_CXX_FLAGS "-fPIC")
-  set(WHISPER_ADDITIONAL_CMAKE_ARGS -DWHISPER_BLAS=OFF -DWHISPER_CUBLAS=OFF -DWHISPER_OPENBLAS=OFF)
+  set(WHISPER_ADDITIONAL_CMAKE_ARGS -DWHISPER_BLAS=ON -DWHISPER_BLAS_VENDOR=OpenBLAS -DWHISPER_CUBLAS=OFF
+                                    -DWHISPER_OPENBLAS=on)
 
   # On Linux build a static Whisper library
   ExternalProject_Add(
@@ -159,3 +160,6 @@ if(APPLE)
   target_link_libraries(Whispercpp INTERFACE "-framework Accelerate -framework CoreML -framework Metal")
   target_link_libraries(Whispercpp INTERFACE Whispercpp::GGML Whispercpp::CoreML)
 endif(APPLE)
+if(UNIX AND NOT APPLE)
+  target_link_libraries(Whispercpp INTERFACE ${BLAS_LIBRARIES})
+endif()
