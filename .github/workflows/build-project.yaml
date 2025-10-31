@@ -120,6 +120,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-ccache-${{ matrix.architecture }}-
 
+      - uses: actions/cache@v4
+        id: icu-cache
+        with:
+          path: |
+            ${{ github.workspace }}/build_macos/ICU_build-prefix/bin
+            ${{ github.workspace }}/build_macos/ICU_build-prefix/include
+            ${{ github.workspace }}/build_macos/ICU_build-prefix/lib
+            ${{ github.workspace }}/build_macos/ICU_build-prefix/sbin
+            ${{ github.workspace }}/build_macos/ICU_build-prefix/share
+            ${{ github.workspace }}/build_macos/ICU_build-prefix/tmp
+          key: ${{ runner.os }}-icu-build-${{ needs.check-event.outputs.config }}-${{ matrix.architecture }}
+          restore-keys: |
+            ${{ runner.os }}-icu-build-${{ matrix.architecture }}-
+
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         if: matrix.architecture == 'arm64'
         with:
@@ -153,6 +167,7 @@ jobs:
           codesignIdent: ${{ steps.codesign.outputs.codesignIdent }}
         env:
           MACOS_ARCH: ${{ matrix.architecture }}
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Package Plugin 📀
         uses: ./.github/actions/package-plugin
@@ -195,6 +210,25 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - uses: awalsh128/cache-apt-pkgs-action@v1.6.0
+        with:
+          packages: |
+            ccache
+            libcurl4-openssl-dev
+            libicu-dev
+            libgles2-mesa-dev
+            libopenblas-dev
+            libopenblas-openmp-dev
+            libqt6svg6-dev
+            libsimde-dev
+            libvulkan-dev
+            obs-studio
+            pkg-config
+            qt6-base-dev
+            qt6-base-private-dev
+          add-repository: ppa:obsproject/obs-studio
+          version: 1.0
 
       - name: Set Up Environment 🔧
         id: setup
