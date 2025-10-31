@@ -311,33 +311,36 @@ void transcription_filter_update(void *data, obs_data_t *s)
 								       gf);
 					}
 				},
-				[gf](const std::string &) {}, new_buffer_num_lines,
-				new_buffer_num_chars_per_line, std::chrono::seconds(3),
-				new_buffer_output_type);
+				new_buffer_num_lines, new_buffer_num_chars_per_line,
+				std::chrono::seconds(3), new_buffer_output_type);
 			gf->translation_monitor.initialize(
 				gf,
 				[gf](const std::string &translated_text) {
-					if (gf->buffered_output &&
-					    !gf->translation_output.empty()) {
-						send_caption_to_source(gf->translation_output,
-								       translated_text, gf);
+					if (gf->buffered_output) {
+						send_caption_to_source(
+							(gf->translation_output.empty() ||
+							 (gf->translation_output == "none"))
+								? gf->text_source_name
+								: gf->translation_output,
+							translated_text, gf);
 					}
 				},
-				[gf](const std::string &) {}, new_buffer_num_lines,
-				new_buffer_num_chars_per_line, std::chrono::seconds(3),
-				new_buffer_output_type);
+				new_buffer_num_lines, new_buffer_num_chars_per_line,
+				std::chrono::seconds(3), new_buffer_output_type);
 			gf->cloud_translation_monitor.initialize(
 				gf,
 				[gf](const std::string &translated_text) {
-					if (gf->buffered_output &&
-					    !gf->translate_cloud_output.empty()) {
-						send_caption_to_source(gf->translate_cloud_output,
-								       translated_text, gf);
+					if (gf->buffered_output) {
+						send_caption_to_source(
+							(gf->translate_cloud_output.empty() ||
+							 (gf->translate_cloud_output == "none"))
+								? gf->text_source_name
+								: gf->translate_cloud_output,
+							translated_text, gf);
 					}
 				},
-				[gf](const std::string &) {}, new_buffer_num_lines,
-				new_buffer_num_chars_per_line, std::chrono::seconds(3),
-				new_buffer_output_type);
+				new_buffer_num_lines, new_buffer_num_chars_per_line,
+				std::chrono::seconds(3), new_buffer_output_type);
 		} else {
 			if (new_buffer_num_lines != gf->buffered_output_num_lines ||
 			    new_buffer_num_chars_per_line != gf->buffered_output_num_chars ||
@@ -349,17 +352,49 @@ void transcription_filter_update(void *data, obs_data_t *s)
 				gf->captions_monitor.setNumPerSentence(
 					new_buffer_num_chars_per_line);
 				gf->captions_monitor.setSegmentation(new_buffer_output_type);
+				gf->captions_monitor.setCaptionPresentationCallback(
+					[gf](const std::string &text) {
+						if (gf->buffered_output) {
+							send_caption_to_source(gf->text_source_name,
+									       text, gf);
+						}
+					});
+
 				gf->translation_monitor.clear();
 				gf->translation_monitor.setNumSentences(new_buffer_num_lines);
 				gf->translation_monitor.setNumPerSentence(
 					new_buffer_num_chars_per_line);
 				gf->translation_monitor.setSegmentation(new_buffer_output_type);
+				gf->translation_monitor.setCaptionPresentationCallback(
+					[gf](const std::string &translated_text) {
+						if (gf->buffered_output) {
+							send_caption_to_source(
+								(gf->translation_output.empty() ||
+								 (gf->translation_output == "none"))
+									? gf->text_source_name
+									: gf->translation_output,
+								translated_text, gf);
+						}
+					});
+
 				gf->cloud_translation_monitor.clear();
 				gf->cloud_translation_monitor.setNumSentences(new_buffer_num_lines);
 				gf->cloud_translation_monitor.setNumPerSentence(
 					new_buffer_num_chars_per_line);
 				gf->cloud_translation_monitor.setSegmentation(
 					new_buffer_output_type);
+				gf->cloud_translation_monitor.setCaptionPresentationCallback(
+					[gf](const std::string &translated_text) {
+						if (gf->buffered_output) {
+							send_caption_to_source(
+								(gf->translate_cloud_output.empty() ||
+								 (gf->translate_cloud_output ==
+								  "none"))
+									? gf->text_source_name
+									: gf->translate_cloud_output,
+								translated_text, gf);
+						}
+					});
 			}
 		}
 		gf->buffered_output_num_lines = new_buffer_num_lines;
