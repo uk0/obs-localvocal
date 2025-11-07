@@ -7,6 +7,24 @@ project(${_name} VERSION ${_version})
 option(ENABLE_FRONTEND_API "Use obs-frontend-api for UI functionality" ON)
 option(ENABLE_QT "Use Qt functionality" ON)
 option(ENABLE_TESTS "Enable tests" OFF)
+option(ENABLE_WEBVTT "Enable WebVTT embedding" ON)
+
+option(USE_SYSTEM_CURL "Use system cURL" OFF)
+option(USE_SYSTEM_ICU "Use system ICU" OFF)
+option(USE_SYSTEM_ONNXRUNTIME "Use system ONNX Runtime" OFF)
+option(LINUX_SOURCE_BUILD
+       "Build Whispercpp dependency from source on Linux instead of using one of the precompiled variants" OFF)
+option(
+  WHISPER_DYNAMIC_BACKENDS
+  "Build backends for all CPU variants when building Whispercpp from source, instead of only building one CPU backend optimised for the host system"
+  OFF)
+option(
+  WHISPER_BUILD_ALL_CUDA_ARCHITECTURES
+  "Build CUDA backend for all NVidia architectures when building Whispercpp from source, instead of only building for the host system's GPU"
+  OFF)
+
+# Doesn't seem to do anything set(DISABLE_ONNXRUNTIME_GPU OFF CACHE STRING "Disables GPU support of ONNX Runtime (Only
+# valid on Linux)")
 
 if(CMAKE_MAJOR_VERSION EQUAL 4)
   message(STATUS "CMake 4 detected")
@@ -40,10 +58,6 @@ if(ENABLE_QT)
                AUTORCC ON)
 endif()
 
-set(USE_SYSTEM_CURL
-    OFF
-    CACHE STRING "Use system cURL")
-
 if(USE_SYSTEM_CURL)
   find_package(CURL REQUIRED)
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE "${CURL_LIBRARIES}")
@@ -53,19 +67,19 @@ else()
   target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE libcurl)
 endif()
 
-if(WIN32)
-  if(DEFINED ENV{ACCELERATION})
-    set(ACCELERATION
-        $ENV{ACCELERATION}
-        CACHE STRING "Acceleration to use" FORCE)
-  endif()
-  if(NOT DEFINED ACCELERATION)
-    set(ACCELERATION
-        "cpu"
-        CACHE STRING "Acceleration to use")
-  endif()
-  set_property(CACHE ACCELERATION PROPERTY STRINGS "cpu" "hipblas" "cuda" "vulkan")
-elseif(UNIX AND NOT APPLE)
+if(DEFINED ENV{ACCELERATION})
+  set(ACCELERATION
+      $ENV{ACCELERATION}
+      CACHE STRING "Acceleration to use" FORCE)
+endif()
+if(NOT DEFINED ACCELERATION)
+  set(ACCELERATION
+      "generic"
+      CACHE STRING "Acceleration to use")
+endif()
+set_property(CACHE ACCELERATION PROPERTY STRINGS "generic" "nvidia" "amd")
+
+if(UNIX AND NOT APPLE)
   set(BLA_VENDOR OpenBLAS)
   find_package(BLAS REQUIRED)
 endif()
@@ -77,17 +91,8 @@ include(cmake/BuildCTranslate2.cmake)
 include(cmake/BuildSentencepiece.cmake)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ct2 sentencepiece)
 
-set(USE_SYSTEM_ONNXRUNTIME
-    OFF
-    CACHE STRING "Use system ONNX Runtime")
-
-set(DISABLE_ONNXRUNTIME_GPU
-    OFF
-    CACHE STRING "Disables GPU support of ONNX Runtime (Only valid on Linux)")
-
-if(DISABLE_ONNXRUNTIME_GPU)
-  target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE DISABLE_ONNXRUNTIME_GPU)
-endif()
+# Doesn't seem to do anything if(DISABLE_ONNXRUNTIME_GPU) target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+# DISABLE_ONNXRUNTIME_GPU) endif()
 
 if(USE_SYSTEM_ONNXRUNTIME)
   if(OS_LINUX)
@@ -103,10 +108,6 @@ if(USE_SYSTEM_ONNXRUNTIME)
 else()
   include(cmake/FetchOnnxruntime.cmake)
 endif()
-
-set(USE_SYSTEM_ICU
-    OFF
-    CACHE STRING "Use system ICU")
 
 if(USE_SYSTEM_ICU)
   find_package(
@@ -142,8 +143,6 @@ endif()
 if(DEFINED ENV{LOCALVOCAL_EXTRA_VERBOSE})
   target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE LOCALVOCAL_EXTRA_VERBOSE)
 endif()
-
-option(ENABLE_WEBVTT "Enable WebVTT embedding" ON)
 
 if(ENABLE_WEBVTT)
   include(cmake/BuildWebVTT.cmake)

@@ -65,7 +65,12 @@ build() {
     linux-aarch64
   )
   local target
-  local config='RelWithDebInfo'
+  if [[ "${+ACCELERATION}" == "amd" ]]
+  then
+    local config='Release'
+  else
+    local config='RelWithDebInfo'
+  fi
   local -r -a _valid_configs=(Debug RelWithDebInfo Release MinSizeRel)
   local -i codesign=0
 
@@ -184,7 +189,7 @@ ${_usage_host:-}"
     setup_ccache
   }
 
-  if [[ ${host_os} == linux ]] {
+  if [[ ${host_os} == linux && ("$(lsb_release -i)" == "Distributor ID: Ubuntu") ]] {
     autoload -Uz setup_linux && setup_linux
   }
 
@@ -230,7 +235,7 @@ ${_usage_host:-}"
           -DCODESIGN_IDENTITY=${CODESIGN_IDENT:--}
         )
 
-        cmake_build_args+=(--preset ${_preset} --parallel --config ${config} -- ONLY_ACTIVE_ARCH=YES)
+        cmake_build_args+=(--verbose --preset ${_preset} --parallel --config ${config} -- ONLY_ACTIVE_ARCH=YES)
         # check the MACOS_ARCH env var to determine the build architecture
         if [[ -n ${MACOS_ARCH} ]] {
           cmake_build_args+=(-arch ${MACOS_ARCH})
