@@ -94,15 +94,10 @@ runs:
         : Run Ubuntu Packaging
         package_args=(
           --target linux-${{ inputs.target }}
+          --config ${{ inputs.config }}
         )
         if (( ${+RUNNER_DEBUG} )) build_args+=(--debug)
 
-        if [[ '${{ inputs.acceleration }}' == 'amd' ]]
-        then
-          package_args+=(--config Release)
-        else
-          package_args+=(--config ${{ inputs.config }})
-        fi
         if [[ '${{ inputs.package }}' == 'true' ]] package_args+=(--package)
 
         .github/scripts/package-linux ${package_args}
