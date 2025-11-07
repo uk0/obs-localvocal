@@ -327,6 +327,7 @@ jobs:
           package: ${{ fromJSON(needs.check-event.outputs.package) }}
           target: x86_64
           config: ${{ needs.check-event.outputs.config }}
+          acceleration: ${{ matrix.acceleration }}
 
       - name: Upload Source Tarball 🗜️
         uses: actions/upload-artifact@v4

@@ -147,10 +147,7 @@ ${_usage_host:-}"
           log_output ${_usage}
           exit 2
         }
-        if [[ "${+ACCELERATION}" != "amd" ]]
-        then
-          config=${2}
-        fi
+        config=${2}
         shift 2
         ;;
       -s|--codesign) codesign=1; shift ;;
