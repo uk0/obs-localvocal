@@ -141,7 +141,10 @@ ${_usage_host:-}"
           log_output ${_usage}
           exit 2
         }
-        config=${2}
+        if [[ "${+ACCELERATION}" != "amd" ]]
+        then
+          config=${2}
+        fi
         shift 2
         ;;
       -s|--codesign) typeset -g codesign=1; shift ;;
