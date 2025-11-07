@@ -65,7 +65,12 @@ package() {
     linux-x86_64
   )
   local target
-  local config='RelWithDebInfo'
+  if [[ "${+ACCELERATION}" == "amd" ]]
+  then
+    local config='Release'
+  else
+    local config='RelWithDebInfo'
+  fi
   local -r -a _valid_configs=(Debug RelWithDebInfo Release MinSizeRel)
   local -i codesign=0
   local -i notarize=0
