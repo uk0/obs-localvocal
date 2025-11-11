@@ -188,6 +188,12 @@ if(APPLE)
   set(WHISPER_SOURCE_DIR ${whispercpp_fetch_SOURCE_DIR})
   set(WHISPER_LIB_DIR ${whispercpp_fetch_SOURCE_DIR})
 
+  add_custom_command(
+    TARGET "${CMAKE_PROJECT_NAME}"
+    PRE_BUILD VERBATIM
+    COMMAND /usr/bin/codesign --force --verify --verbose --sign "${CODESIGN_IDENTITY}"
+            "${whispercpp_fetch_SOURCE_DIR}/lib/libomp.dylib")
+
   file(GLOB WHISPER_DYLIBS ${whispercpp_fetch_SOURCE_DIR}/lib/*.dylib)
   install(FILES ${WHISPER_DYLIBS} DESTINATION "${CMAKE_PROJECT_NAME}.plugin/Contents/Frameworks")
 elseif(WIN32)
