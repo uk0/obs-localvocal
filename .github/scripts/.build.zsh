@@ -233,6 +233,7 @@ ${_usage_host:-}"
         cmake_args+=(
           -DCODESIGN_TEAM=${CODESIGN_TEAM:-}
           -DCODESIGN_IDENTITY=${CODESIGN_IDENT:--}
+          -DCMAKE_BUILD_TYPE=${config}
         )
 
         cmake_build_args+=(--verbose --preset ${_preset} --parallel --config ${config} -- ONLY_ACTIVE_ARCH=YES)

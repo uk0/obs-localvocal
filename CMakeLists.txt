@@ -182,6 +182,15 @@ add_subdirectory(src/translation/cloud-translation)
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})
 
+if(APPLE)
+  # Brute force ftw
+  add_custom_command(
+    TARGET "${CMAKE_PROJECT_NAME}"
+    POST_BUILD VERBATIM
+    COMMAND /usr/bin/codesign --force --verify --verbose --sign "${CODESIGN_IDENTITY}"
+            "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${PROJECT_NAME}.plugin/Contents/MacOS/${PROJECT_NAME}")
+endif()
+
 if(ENABLE_TESTS)
   add_subdirectory(src/tests)
 endif()
