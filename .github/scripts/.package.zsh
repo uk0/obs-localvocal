@@ -217,8 +217,13 @@ ${_usage_host:-}"
         read_codesign_installer
         read_codesign_pass
 
-        xcrun notarytool submit ${project_root}/release/${output_name}.pkg \
-          --keychain-profile "OBS-Codesign-Password" --wait
+        NOTARY_SUBMIT_OUTPUT=$(xcrun notarytool submit ${project_root}/release/${output_name}.pkg \
+          --keychain-profile "OBS-Codesign-Password" --wait)
+
+        echo "$NOTARY_SUBMIT_OUTPUT"
+
+        xcrun notarytool log $(echo "$NOTARY_SUBMIT_OUTPUT" | awk '/id: / { print $2;exit; }') --keychain-profile "OBS-Codesign-Password" \
+          notarytool_log_${macos_arch}.json
 
         local -i _status=0
 

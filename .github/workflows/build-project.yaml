@@ -170,6 +170,7 @@ jobs:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Package Plugin 📀
+        id: package_plugin
         uses: ./.github/actions/package-plugin
         with:
           target: macos-${{ matrix.architecture }}
@@ -185,15 +186,23 @@ jobs:
         env:
           MACOS_ARCH: ${{ matrix.architecture }}
 
+      - name: Upload Notarization Failure Artifacts 📡
+        uses: actions/upload-artifact@v4
+        if: failure() && steps.package_plugin.outcome == 'failure'
+        with:
+          name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-macos-${{ matrix.architecture }}-${{ needs.check-event.outputs.commitHash }}-notarization-log
+          path: ${{ github.workspace }}/notarytool_log_*.json
+
       - name: Upload Artifacts 📡
         uses: actions/upload-artifact@v4
+        if: steps.package_plugin.outcome == 'success'
         with:
           name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-macos-${{ matrix.architecture }}-${{ needs.check-event.outputs.commitHash }}
           path: ${{ github.workspace }}/release/${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-macos-${{ matrix.architecture }}.*
 
       - name: Upload Debug Symbol Artifacts 🪲
         uses: actions/upload-artifact@v4
-        if: ${{ needs.check-event.outputs.config == 'Release' }}
+        if: ${{ needs.check-event.outputs.config == 'Release' }} && ${{ steps.package_plugin.outcome == 'success' }}
         with:
           name: ${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-macos-${{ matrix.architecture }}-${{ needs.check-event.outputs.commitHash }}-dSYMs
           path: ${{ github.workspace }}/release/${{ steps.setup.outputs.pluginName }}-${{ steps.setup.outputs.pluginVersion }}-macos-${{ matrix.architecture }}-dSYMs.*
